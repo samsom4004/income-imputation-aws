@@ -126,12 +126,12 @@ resource "aws_sagemaker_model_package_group" "models" {
 
 # ---- cost guard-rail -------------------------------------------------------------------------
 resource "aws_budgets_budget" "monthly" {
-  count             = var.budget_email == "" ? 0 : 1
-  name              = "${var.project}-monthly"
-  budget_type       = "COST"
-  limit_amount      = tostring(var.monthly_budget_usd)
-  limit_unit        = "USD"
-  time_unit         = "MONTHLY"
+  count        = var.budget_email == "" ? 0 : 1
+  name         = "${var.project}-monthly"
+  budget_type  = "COST"
+  limit_amount = tostring(var.monthly_budget_usd)
+  limit_unit   = "USD"
+  time_unit    = "MONTHLY"
   cost_filter {
     name   = "TagKeyValue"
     values = [format("user:Project$%s", var.project)]
