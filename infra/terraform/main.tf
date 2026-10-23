@@ -24,8 +24,9 @@ locals {
 
 # ---- data and artefact bucket: private, encrypted, versioned ---------------------------------
 resource "aws_s3_bucket" "ml" {
-  bucket = local.bucket_name
-  tags   = local.tags
+  bucket        = local.bucket_name
+  force_destroy = var.force_destroy
+  tags          = local.tags
 }
 
 resource "aws_s3_bucket_public_access_block" "ml" {
@@ -90,14 +91,38 @@ data "aws_iam_policy_document" "permissions" {
     resources = [aws_s3_bucket.ml.arn, "${aws_s3_bucket.ml.arn}/*"]
   }
   statement {
-    sid       = "Logs"
-    actions   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams"]
-    resources = ["arn:aws:logs:${var.region}:${data.aws_caller_identity.me.account_id}:log-group:/aws/sagemaker/*"]
+    sid     = "Logs"
+    actions = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams"]
+    resources = [
+      "arn:aws:logs:${var.region}:${data.aws_caller_identity.me.account_id}:log-group:/aws/sagemaker/*",
+      "arn:aws:logs:${var.region}:${data.aws_caller_identity.me.account_id}:log-group:/aws/sagemaker/*:log-stream:*",
+    ]
   }
   statement {
     sid       = "ContainerImages"
     actions   = ["ecr:GetAuthorizationToken", "ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer", "ecr:BatchCheckLayerAvailability"]
     resources = ["*"]
+  }
+  statement {
+    sid = "PipelineAndJobs"
+    actions = [
+      "sagemaker:CreateProcessingJob", "sagemaker:DescribeProcessingJob", "sagemaker:StopProcessingJob",
+      "sagemaker:CreateTrainingJob", "sagemaker:DescribeTrainingJob", "sagemaker:StopTrainingJob",
+      "sagemaker:CreateModel", "sagemaker:DescribeModel", "sagemaker:CreateModelPackage", "sagemaker:DescribeModelPackage",
+      "sagemaker:UpdateModelPackage", "sagemaker:ListTags", "sagemaker:AddTags", "sagemaker:DescribePipeline",
+      "sagemaker:DescribePipelineExecution", "sagemaker:ListPipelineExecutionSteps",
+    ]
+    resources = ["arn:aws:sagemaker:${var.region}:${data.aws_caller_identity.me.account_id}:*"]
+  }
+  statement {
+    sid       = "PassRoleToSageMakerOnly"
+    actions   = ["iam:PassRole"]
+    resources = [aws_iam_role.sagemaker.arn]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["sagemaker.amazonaws.com"]
+    }
   }
   statement {
     sid       = "Metrics"

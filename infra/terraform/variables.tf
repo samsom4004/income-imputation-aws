@@ -26,3 +26,9 @@ variable "budget_email" {
   type        = string
   default     = ""
 }
+
+variable "force_destroy" {
+  description = "Allow `terraform destroy` to delete a non-empty bucket. Use true only in a sandbox."
+  type        = bool
+  default     = false
+}

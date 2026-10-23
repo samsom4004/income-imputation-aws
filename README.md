@@ -65,6 +65,7 @@ biased (coverage 0-25%), complete-case `lm` under-estimates the mean wage, while
 4. `python scripts/deploy_endpoint.py --role-arn <role> --model-data s3://.../model.tar.gz` (serverless: scales to zero)
 5. `python scripts/invoke_endpoint.py`, and when finished `python scripts/delete_endpoint.py`
 
+**First time on AWS?** Follow [docs/FIRST_AWS_RUN.md](docs/FIRST_AWS_RUN.md) (account, login, every command, cleanup).
 Full details, IAM, cost estimates and monitoring: [docs/DEPLOY_AWS.md](docs/DEPLOY_AWS.md).
 
 ## Repository layout
