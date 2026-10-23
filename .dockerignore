@@ -1,0 +1,7 @@
+.git
+.venv
+build
+artifacts
+data
+**/__pycache__
+*.csv

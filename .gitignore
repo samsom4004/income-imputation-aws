@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+# Data and models: never commit survey data or fitted artefacts (donor models contain real wages)
+data/
+artifacts/
+*.csv
+*.joblib
+*.tar.gz
+*.RData
+.DS_Store
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!example.tfvars
+crash.log
+# Secrets
+.env
+*.pem
