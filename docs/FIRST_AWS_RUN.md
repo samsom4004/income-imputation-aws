@@ -69,8 +69,8 @@ The best practice is **IAM Identity Center** (temporary logins, no secret keys o
 
 Check: opening the portal URL shows your account and a **Management console** button.
 
-> **If it fails or feels too long:** you can instead create an IAM user with MFA and an access key. That is
-> less safe. Ask me and I will write that route, but do not share the key with anyone.
+> **If this feels too long:** use the simpler but less safe route in [AWS_LOGIN_IAM_USER.md](AWS_LOGIN_IAM_USER.md)
+> (IAM user with an access key). It replaces Part 3 and Part 5. Never share the key with anyone.
 
 ## Part 4. Install the tools on your Mac (30 minutes)
 
